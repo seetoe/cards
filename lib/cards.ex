@@ -1,35 +1,63 @@
 defmodule Cards do
   @moduledoc """
-  Documentation for Cards.
+    Provides methods for creating and handling a deck of cards.
   """
 
   @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Cards.hello()
-      :world
-
+    Returns a list of strings representing a deck of playing cards.
   """
-
   def create_deck do
-    values = ["Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"]
+    values = [
+      "Ace",
+      "Two",
+      "Three",
+      "Four",
+      "Five",
+      "Six",
+      "Seven",
+      "Eight",
+      "Nine",
+      "Ten",
+      "Jack",
+      "Queen",
+      "King"
+    ]
+
     suits = ["Spades", "Clubs", "Hearts", "Diamonds"]
-    
+
     for suit <- suits, value <- values do
-        "#{value} of #{suit}"
+      "#{value} of #{suit}"
     end
   end
 
+  @doc """
+    The `deck` argument is a list of strings representing a deck of cards.
+    Returns a shuffled version of provided deck.
+  """
   def shuffle(deck) do
     Enum.shuffle(deck)
   end
 
+  @doc """
+    The `deck` argument is a list of strings representing a deck of cards.
+    The `card` argument is a string representing a card.
+    Returns true/false indicating whether card is in the deck.
+  """
   def contains?(deck, card) do
     Enum.member?(deck, card)
   end
 
+  @doc """
+    Divides a deck into a hand and the remainer of the deck.
+    The `hand_size` argument indicates how many cards should
+    be in the hand.
+
+    ## Examples
+        iex> deck = Cards.create_deck
+        iex> { hand, deck } = Cards.deal(deck, 1)
+        iex> hand
+        ["Ace of Spades"]
+  """
   def deal(deck, hand_size) do
     Enum.split(deck, hand_size)
   end
@@ -41,14 +69,14 @@ defmodule Cards do
 
   def load(filename) do
     case File.read(filename) do
-        { :ok, binary } -> :erlang.binary_to_term(binary)
-        { :error, _reason } -> "That file does not exist"
+      {:ok, binary} -> :erlang.binary_to_term(binary)
+      {:error, _reason} -> "That file does not exist"
     end
   end
 
   def create_hand(hand_size) do
-      Cards.create_deck
-      |> Cards.shuffle
-      |> Cards.deal(hand_size)
+    Cards.create_deck()
+    |> Cards.shuffle()
+    |> Cards.deal(hand_size)
   end
 end
